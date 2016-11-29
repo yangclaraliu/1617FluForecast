@@ -21,9 +21,6 @@
 * Submission: contains all submission sheets.
 
 ## On-going models
-*
-**Environmental Model 1**: is the environmental model that contains only local public health and environmental information.
-*
-**SARIMA Model**: is the modified SARIMA model.
-*
-**PArabola**: Parabola model proposed by Dr. J.Lega
+* **Environmental Model 1**: is the environmental model that contains only local public health and environmental information.
+* **SARIMA Model**: is the modified SARIMA model.
+* **Parabola**: Parabola model proposed by Dr. J.Lega
