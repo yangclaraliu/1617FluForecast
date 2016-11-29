@@ -19,6 +19,7 @@
 * 4wk_Results: created as a set of forecast is generated; contains forecast plots 4 weeks into the future at the time of forecast.
 * Forecast_Comparison: created when a set of forecast is returned after that week's true ILI\% has been published. This folder cotnains result of comparing UMN model performance with all other competing models. 
 * Submission: contains all submission sheets.
+
 ## On-going models
 *
 **Environmental Model 1**: is the environmental model that contains only local public health and environmental information.
