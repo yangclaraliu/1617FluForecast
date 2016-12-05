@@ -2,7 +2,7 @@
 ## How to update environmental database from MERRA-2 online database
 1. Run **update-Environmental_v1.R**: Read new data in the format of "nc4", extract targeted environmental variables: TS_min, TS_mean, TS_max, T2M_min, T2M_mean, T2M_max, T2MDEW_mean, QV2M. By the end of this step, the environmental variables are in the daily scale ("recordx.RData").
 2. Run **dialyweekly_conversion_v1.R**: Read daily environmental data and save as weekly data ("weekly_environmentx.RData").
-3. Run **timealign_va.R**: Match the time steps of the environmental data and the health data ("timealignx.RData").
+3. Run **timealign_v1.R**: Match the time steps of the environmental data and the health data ("timealignx.RData").
 
 ## How to update model in use
 4. Run **model_selected.R** one 3 is renewed. The output of this step will be a new set of model and a new set of variable lags.
