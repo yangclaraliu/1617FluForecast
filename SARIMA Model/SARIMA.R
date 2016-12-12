@@ -5,7 +5,7 @@ setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
  baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
  epidemic_week <- c(40:52,1:20)
  submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
- report = 5
+ report = 6
  sapply(c("draw.onsettime.sim.R","draw.peak.sim.R","draw.peakweek.sim.R","draw.wk.sim.R"),source)
  
 nsim = 1000
@@ -70,11 +70,11 @@ onsettime_point <- ((intersect(intersect(which(c(tail(exp(model$x),week_in),exp(
            draw.wk.sim(sim_res[3,])[,3],
            exp(forecast(model,52-week_in)$mean[4]),
            draw.wk.sim(sim_res[4,])[,3])
-  setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report5")
+  setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report6")
   save(point_res,sim_res,file=paste("HHS",h,".RData",sep=""))
   
 ##############Save the results by HHS first###########################
-  setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report5")
+  setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report6")
   png.name <- paste(paste(paste("HHS",h,sep=""),submission_date[report],sep="-"),"-4wk.png",sep="")
   png(png.name)
   plot(1,xlab="Epidemic Week (Starting from Week 40 Calendar Year)",ylab="ILI%",ylim=range(unlist(sim_res[1:4,])),type="n",xlim=c(1,week_in+4),main=paste("EW",tail(flu$WEEK,1),sep=""))
@@ -158,11 +158,11 @@ res <- c(epidemic_week[which.max(draw.onset.sim(onsettime)[1:33,2])],
          exp(forecast(model,52-week_in)$mean[4]),
          draw.wk.sim(sim_res[4,])[,3])
 #
-setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report5")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report6")
 save(point_res,sim_res,file=paste("National",".RData",sep=""))
 
 ##############Save the results at National Level###########################
-setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report5")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report6")
 png.name <- paste(paste("National",submission_date[report],sep="-"),"-4wk.png",sep="")
 png(png.name)
 plot(1,xlab="Epidemic Week (Starting from Week 40 Calendar Year)",ylab="ILI%",ylim=range(unlist(sim_res[1:4,])),type="n",xlim=c(1,week_in+4),main=paste("EW",tail(flu$WEEK,1),sep=""))
@@ -178,8 +178,10 @@ abline(h=baseline[1,12], lty=2)
 dev.off()
 name <- "US National"
 submission[submission$Location==name,"Value"] <- res
+
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Submission")
 file_name <- paste(paste(paste("EW",tail(flu$WEEK,1),sep=""),"HumNat2",submission_date[report],sep="-"),".csv",sep="")
+file_name
 write.csv(submission,file_name,row.names = F)
 
 

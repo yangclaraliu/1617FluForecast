@@ -1,15 +1,13 @@
 #setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
-setwd("~/Google Drive/Influenza/16-17_forecast")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
 submission <- read.csv("Long_Flu_Submission_Template_update.csv")
-load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/ENVR_RawResult_2016-11-07.RData")
-load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all.RData")
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults/ENVR_RawResult_2016-12-05.RData")
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all/fore_tab_all_EW47_EN44.RData")
 source("draw.wk.sim.R");source("draw.onsettime.sim.R"); source("draw.peakweek.sim.R");source("draw.peakweek.sim.R")
-
 baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
 epi_weeks <- c(40:52,1:39)
 submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
-report = 1
-
+report = 6
 submission$Value <- NA
 
 for(h in 1:10){
@@ -28,19 +26,19 @@ for(h in 1:10){
   
   res <- c(epi_weeks[round(mean(onsettime,na.rm=T))],draw.onset.sim(onsettime)[,2],
            epi_weeks[round(mean(peaktime))],draw.peakweek.sim(peaktime)[,2],
-           mean(peaksize),draw.peak.sim(peaksize)[,3],
+           mean(as.numeric(peaksize)),draw.peak.sim(peaksize)[,3],
            mean(unlist(temp[1,])),draw.wk.sim((unlist(temp[1,])))[,3],
            mean(unlist(temp[2,])),draw.wk.sim((unlist(temp[2,])))[,3],
            mean(unlist(temp[3,])),draw.wk.sim((unlist(temp[3,])))[,3],
            mean(unlist(temp[4,])),draw.wk.sim((unlist(temp[4,])))[,3]
   )
-  
   name <- paste("HHS Region",h)
   submission[submission$Location==name,"Value"] <- res
 }
+base <- get_flu_data("national",,"ilinet",c(2002:2016))
 
-file_name <- paste(paste(paste("EW",length(which(!is.na(tail(fore_tab_all[[1]]$ILIp,52))))+40-1,sep=""),"UMN",submission_date[report],sep="-"),".csv",sep="")
-
-setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Submissions")
+file_name <- paste(paste(paste("EW",tail(base$WEEK,1),sep=""),"HumNat",submission_date[report],sep="-"),".csv",sep="")
+file_name
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Submissions")
 write.csv(submission,file_name)
 
