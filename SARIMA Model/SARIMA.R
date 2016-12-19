@@ -5,11 +5,11 @@ setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
  baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
  epidemic_week <- c(40:52,1:20)
  submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
- report = 6
+ report = 7
  sapply(c("draw.onsettime.sim.R","draw.peak.sim.R","draw.peakweek.sim.R","draw.wk.sim.R"),source)
  
 nsim = 1000
-for(h in 1:10){
+for(h in 6:10){
   flu <- get_flu_data("hhs",h,"ilinet",c(2002:2016))
   #plot(flu$`% WEIGHTED ILI`,type='l')
   start <- which(flu$WEEK==40)
@@ -70,11 +70,11 @@ onsettime_point <- ((intersect(intersect(which(c(tail(exp(model$x),week_in),exp(
            draw.wk.sim(sim_res[3,])[,3],
            exp(forecast(model,52-week_in)$mean[4]),
            draw.wk.sim(sim_res[4,])[,3])
-  setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report6")
+  setwd(paste("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report",report,sep = ""))
   save(point_res,sim_res,file=paste("HHS",h,".RData",sep=""))
   
 ##############Save the results by HHS first###########################
-  setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report6")
+  setwd(paste("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report",report,sep = ""))
   png.name <- paste(paste(paste("HHS",h,sep=""),submission_date[report],sep="-"),"-4wk.png",sep="")
   png(png.name)
   plot(1,xlab="Epidemic Week (Starting from Week 40 Calendar Year)",ylab="ILI%",ylim=range(unlist(sim_res[1:4,])),type="n",xlim=c(1,week_in+4),main=paste("EW",tail(flu$WEEK,1),sep=""))
@@ -121,7 +121,7 @@ for(i in 1:nsim){
     #check 2 things. (1)
     toobig <- any(simulated_data > 10)
     #check 2 things. (2)
-    peaktime_temp <- unlist(c(flu[flu$season==15,"% WEIGHTED ILI"],simulated_data))
+    peaktime_temp <- which.max(unlist(c(flu[flu$season==15,"% WEIGHTED ILI"],simulated_data)))
     #       peaktime_index <- peakwindow(simulated_data)$smd.max.index
     #       if(peaktime_temp>52) peaktime_temp <- peaktime_temp-52
     toolate <- ( peaktime_temp > 26)
@@ -148,7 +148,7 @@ res <- c(epidemic_week[which.max(draw.onset.sim(onsettime)[1:33,2])],
          point_res[2],
          draw.peakweek.sim(peaktime)[,2],
          point_res[3],
-         draw.peak.sim(peaksize)[,3],
+         draw.peak.sim(peaksize)[,3]#,
          exp(forecast(model,52-week_in)$mean[1]),
          draw.wk.sim(sim_res[1,])[,3],
          exp(forecast(model,52-week_in)$mean[2]),
@@ -158,11 +158,11 @@ res <- c(epidemic_week[which.max(draw.onset.sim(onsettime)[1:33,2])],
          exp(forecast(model,52-week_in)$mean[4]),
          draw.wk.sim(sim_res[4,])[,3])
 #
-setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report6")
+setwd(paste("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/RawResults/Report",report,sep = ""))
 save(point_res,sim_res,file=paste("National",".RData",sep=""))
 
 ##############Save the results at National Level###########################
-setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report6")
+setwd(paste("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/SARIMA/Weekly_Forecasts_Plots/Report",report,sep = ""))
 png.name <- paste(paste("National",submission_date[report],sep="-"),"-4wk.png",sep="")
 png(png.name)
 plot(1,xlab="Epidemic Week (Starting from Week 40 Calendar Year)",ylab="ILI%",ylim=range(unlist(sim_res[1:4,])),type="n",xlim=c(1,week_in+4),main=paste("EW",tail(flu$WEEK,1),sep=""))
