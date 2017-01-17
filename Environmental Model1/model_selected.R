@@ -1,8 +1,8 @@
-require(dlnm);require(splines);require(infotheo);require(usdm); require(randomForest)
-load("~/Google Drive/Influenza/16-17_forecast/HHS_timealign1.RData")
-#load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/HHS_timealign1.RData")
-#setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression")
-setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression")
+require(dlnm);require(splines);require(infotheo);require(usdm); require(randomForest);require(zoo)
+#load("~/Google Drive/Influenza/16-17_forecast/HHS_timealign3.RData")
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/HHS_timealign4.RData")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression")
+#setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression")
 source("lags.R")
 model_HHS <- list()
 lags_HHS <- list()
@@ -54,7 +54,7 @@ for(h in 1:10){
   seasonality <- stl(ts(regtab$ILIp,freq=52),s.window = "periodic",na.action = na.approx); seasonality <- seasonality$time.series[,1]
   plot(seasonality)
   regtab_aftervif["seasonality"] <- seasonality
-  model <- lm(y~.,data=regtab_aftervif)
+  model <- glm(y~.,family="gaussian",data=regtab_aftervif)
   plot(regtab$ILIp,type='l')
   lines(c(rep(NA,52),exp(model$fitted.values)),col="red")
   model_HHS[[h]] <- model
@@ -66,5 +66,5 @@ for(h in 1:10){
   lags_HHS[[h]] <- list(Ivar,Tvar,Hvar,TVvar,HVvar)
 }
 
-save(model_HHS, file="Model_HHS.RData")
-save(lags_HHS, file="lags_HHS.RData")
+save(model_HHS, file="Model_HHS3.RData")
+save(lags_HHS, file="lags_HHS3.RData")

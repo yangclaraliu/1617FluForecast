@@ -1,18 +1,26 @@
-load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/model_HHS.Rdata")
+#load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/model_HHS.Rdata")
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/model_HHS3.Rdata")
 #load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all.RData")
-load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all/fore_tab_all_EW43_EN39.RData")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all/")
+record_list <- list.files(pattern=".RData")
+mark <- which.max(lapply(1:length(record_list),function(x) file.info(record_list[x])$ctime))
+load(record_list[mark])
+
+
 require(scales)
 #load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/model_seasonality.RData")
 #load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab.RData")
-setwd("~/Google Drive/Influenza/16-17_forecast")
+#setwd("~/Google Drive/Influenza/16-17_forecast")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
 baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
 submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
-report = 1
+report = 11
 sim_res_all <- list()
 
 for(h in 1:10){
   to.fill <- which(is.na(fore_tab_all[[h]]$ILIp))
   new_tab <- fore_tab_all[[h]][to.fill,]
+  new_tab$ILIp <- as.numeric(as.character(new_tab$ILIp))
   new_tab_blank <- new_tab
   
   simulate.model <- function(i){
@@ -60,8 +68,10 @@ for(h in 1:10){
   
   week_in <- 52-nrow(new_tab)
   #setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Weekly_Forecasts_Plots")
-  setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Weekly_Forecasts_Plots/Report1")
-  png.name <- paste(paste(paste("HHS",h,sep=""),submission_date[1],sep="-"),"-4wk.png",sep="")
+  #setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Weekly_Forecasts_Plots/Report4")
+  #Gai
+  setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Weekly_Forecasts_Plots/Report11")
+  png.name <- paste(paste(paste("HHS",h,sep=""),submission_date[report],sep="-"),"-4wk.png",sep="")
   png(png.name)
   plot(1,xlab="Epidemic Week (Starting from Week 40 Calendar Year)",ylab="ILI%",ylim=range(unlist(sim_res[1:4,])),type="n",xlim=c(1,week_in+4),main=paste("EW",40+week_in-1,sep=""))
   points(x=jitter(rep(week_in+1,ncol(sim_res))),y=sim_res[1,],col=alpha("grey",0.5),pch=20)
@@ -77,9 +87,11 @@ for(h in 1:10){
   
   sim_res_all[[h]] <- sim_res
 }
+
 name <- paste("ENVR_RawResult_",submission_date[report],".RData",sep="")
 name
-setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults")
+#setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults")
 save(sim_res_all,file=name)
 
 

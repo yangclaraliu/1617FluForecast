@@ -14,7 +14,7 @@ draw.fore.tab.base <- function(h){
   HHS_flu <- HHS_flu[HHS_flu$season>=6,]
   ILI_new <- get_flu_data("hhs",h,"ilinet",c(2002:2017))
   #ILI_new <- tot_inc[tot_inc$season>5,c(1:3,h+3)]
-  week_in <- tail(ILI_new$WEEK,1)-40+1
+  week_in <- tail(ILI_new$WEEK,1)-40+1+52
   new_blank <- data.frame(matrix(NA,nrow=nrow(ILI_new)-nrow(HHS_flu),ncol=ncol(HHS_flu)))
   new_blank <- data.frame(matrix(NA,nrow=nrow(ILI_new)-nrow(HHS_flu),ncol=ncol(HHS_flu)))
   colnames(new_blank) <- colnames(HHS_flu)
@@ -73,7 +73,7 @@ for(h in 1:10){fore_tab_base_all[[h]] <- draw.fore.tab.base(h)}
 #setwd("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_base_all")
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_base_all")
 #fill in
-file_name <- paste("fore_tab_base_all_EW",tail(base$WEEK,1),"_EN44.RData",sep="")
+file_name <- paste("fore_tab_base_all_EW",tail(base$WEEK,1),"_EN48.RData",sep="")
 #file_name <- paste("fore_tab_base_all_EW",tail(tot_inc$wk,1),"_EN44.RData",sep="")
 save(fore_tab_base_all,file=file_name)
 

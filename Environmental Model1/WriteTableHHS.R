@@ -1,13 +1,16 @@
 #setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
 submission <- read.csv("Long_Flu_Submission_Template_update.csv")
-load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults/ENVR_RawResult_2016-12-05.RData")
-load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all/fore_tab_all_EW47_EN44.RData")
+#gai
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults/ENVR_RawResult_2017-01-16.RData")
+#gai
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all/fore_tab_all_EW1_EN48.RData")
 source("draw.wk.sim.R");source("draw.onsettime.sim.R"); source("draw.peakweek.sim.R");source("draw.peakweek.sim.R")
 baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
 epi_weeks <- c(40:52,1:39)
 submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
-report = 6
+#gai
+report = 11
 submission$Value <- NA
 
 for(h in 1:10){
@@ -40,5 +43,5 @@ base <- get_flu_data("national",,"ilinet",c(2002:2016))
 file_name <- paste(paste(paste("EW",tail(base$WEEK,1),sep=""),"HumNat",submission_date[report],sep="-"),".csv",sep="")
 file_name
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Submissions")
-write.csv(submission,file_name)
+write.csv(submission,file_name,row.names = F)
 

@@ -5,11 +5,11 @@ setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
  baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
  epidemic_week <- c(40:52,1:20)
  submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
- report = 7
+ report = 11
  sapply(c("draw.onsettime.sim.R","draw.peak.sim.R","draw.peakweek.sim.R","draw.wk.sim.R"),source)
  
-nsim = 1000
-for(h in 6:10){
+nsim = 1500
+for(h in 1:10){
   flu <- get_flu_data("hhs",h,"ilinet",c(2002:2016))
   #plot(flu$`% WEIGHTED ILI`,type='l')
   start <- which(flu$WEEK==40)
@@ -25,7 +25,7 @@ for(h in 6:10){
   flu$`% WEIGHTED ILI`[flu$`% WEIGHTED ILI`==0] <- NA
   model <- Arima(log(flu$`% WEIGHTED ILI`),c(3,1,0),c(0,1,2))
   #tsdisplay(model$residuals)
-  week_in <- tail(flu$WEEK,1)-40+1
+  week_in <- tail(flu$WEEK,1)-40+1+52
   sim_res <- data.frame(matrix(NA,nrow=52-week_in,ncol=nsim))
   peaksize <- peaktime <- onsettime <- rep(NA,nsim)
   for(i in 1:nsim){
@@ -112,7 +112,7 @@ flu$`% WEIGHTED ILI` <- ts(as.numeric(flu$`% WEIGHTED ILI`),freq=52)
 flu$`% WEIGHTED ILI`[flu$`% WEIGHTED ILI`==0] <- NA
 model <- Arima(log(flu$`% WEIGHTED ILI`),c(3,1,0),c(0,1,2))
 # tsdisplay(model$residuals)
-week_in <- tail(flu$WEEK,1)-40+1
+week_in <- tail(flu$WEEK,1)-40+1+52
 sim_res <- data.frame(matrix(NA,nrow=52-week_in,ncol=nsim))
 peaksize <- peaktime <- onsettime <- rep(NA,nsim)
 for(i in 1:nsim){
@@ -148,7 +148,7 @@ res <- c(epidemic_week[which.max(draw.onset.sim(onsettime)[1:33,2])],
          point_res[2],
          draw.peakweek.sim(peaktime)[,2],
          point_res[3],
-         draw.peak.sim(peaksize)[,3]#,
+         draw.peak.sim(peaksize)[,3],
          exp(forecast(model,52-week_in)$mean[1]),
          draw.wk.sim(sim_res[1,])[,3],
          exp(forecast(model,52-week_in)$mean[2]),

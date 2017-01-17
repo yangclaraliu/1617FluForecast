@@ -1,6 +1,7 @@
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_base_all")
 record_list <- list.files(pattern=".RData")
-load(record_list[length(record_list)])
+mark <- which.max(lapply(1:length(record_list),function(x) file.info(record_list[x])$ctime))
+load(record_list[mark])
 
 #load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_base_all_EW42_EN39.RData")
 #which.max(gsub("EW","",matrix(unlist(strsplit(list.files(pattern = ".RData"),"_")),ncol=6,byrow=T)[,5]))
@@ -10,7 +11,7 @@ load(record_list[length(record_list)])
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression")
 source("lags.R")
 #load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/lags_HHS.RData")
-load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/lags_HHS2.RData")
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/lags_HHS3.RData")
 
 #load("~/Google Drive/Influenza/16-17_forecast/Environmental_Regression/model_HHS.RData")
 
@@ -57,5 +58,5 @@ setwd("C:/Users/liux3204//Google Drive/Influenza/16-17_forecast/Environmental_Re
 #base <- get_flu_data("national",,"ilinet",c(2002:2016))
 
 #file_name <- paste("fore_tab_all_EW",tail(base$WEEK,1),"_EN44.RData",sep="")
-file_name <- gsub("base_","",record_list[length(record_list)])
+file_name <- gsub("base_","",record_list[mark])
 save(fore_tab_all,file=file_name)

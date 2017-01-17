@@ -1,10 +1,10 @@
 require(cdcfluview); require(scales)
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression")
-#
-load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults/ENVR_RawResult_2016-11-28-2.RData")
+#gai
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/RawResults/ENVR_RawResult_2016-12-19.RData")
 load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/local_to_national_model.RData")
-#
-load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all/fore_tab_all_EW46_EN44.RData")
+#gai
+load("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/fore_tab_all/fore_tab_all_EW49_EN44.RData")
 source("draw.wk.sim.R");source("draw.onsettime.sim.R"); source("draw.peakweek.sim.R");source("draw.peakweek.sim.R")
 baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Submissions")
@@ -12,8 +12,8 @@ base <- get_flu_data("national",,"ilinet",c(2002:2016))
 submission <- read.csv(list.files(pattern=paste("EW",tail(base$WEEK,1),sep="")),stringsAsFactors = F)
 epi_weeks <- c(40:52,1:39)
 submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
-#
-report = 4
+#gai
+report = 7
 
 sim_res_national <- data.frame(matrix(NA,ncol=1000,nrow=nrow(sim_res_all[[1]])))
 for(i in 1:1000){
@@ -25,7 +25,7 @@ for(i in 1:1000){
 
 peaksize <- peaktime <- onsettime <- rep(NA,ncol(sim_res_national))
 for(i in 1:ncol(sim_res_national)){
-  ILIp <- c(base$X..WEIGHTED.ILI,sim_res_national[,i])
+  ILIp <- c(base$`% WEIGHTED ILI`,sim_res_national[,i])
   ILIp <- ILIp[!is.na(ILIp)]
   ILIp_15 <- unlist(tail(ILIp,52))
   onsettime_sim_res_national <- (intersect(intersect(which(ILIp_15>baseline[1,12]),which(ILIp_15>baseline[1,12])+1),which(ILIp_15>baseline[1,12])+2)-2)
@@ -42,17 +42,17 @@ res <- c(epi_weeks[round(mean(onsettime,na.rm=T))],draw.onset.sim(onsettime)[,2]
          mean(unlist(sim_res_national[3,])),draw.wk.sim((unlist(sim_res_national[3,])))[,3],
          mean(unlist(sim_res_national[4,])),draw.wk.sim((unlist(sim_res_national[4,])))[,3])
 submission[submission$Location=="US National","Value"] <- res
-file_name <- paste(paste(paste("EW",tail(base$WEEK,1),sep=""),"UMN",submission_date[report],sep="-"),".csv",sep="")
+file_name <- paste(paste(paste("EW",tail(base$WEEK,1),sep=""),"HumNat",submission_date[report],sep="-"),".csv",sep="")
 setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Submissions")
-write.csv(submission,file_name)
+write.csv(submission,file_name,row.names = F)
 
 #
-setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Weekly_Forecasts_Plots/Report4-2")
+setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast/Environmental_Regression/Weekly_Forecasts_Plots/Report7")
 
 png.name <- paste(paste("National",submission_date[report],sep="-"),"-4wk.png",sep="")
 png(png.name)
 week_in <- tail(base$WEEK,1)-40+1
-plot(1,xlab="Epidemic Week (Starting from Week 40 Calendar Year)",ylab="ILI%",ylim=range(unlist(sim_res_national[1:4,])),type="n",xlim=c(1,week_in+4),main=paste("EW",40+week_in-1,sep=""))
+plot(1,xlab="Epidemic Week (Starting from Week 40 Calendar Year)",ylab="ILI%",ylim=range(c(unlist(sim_res_national[1:4,]),ILIp_15)),type="n",xlim=c(1,week_in+4),main=paste("EW",40+week_in-1,sep=""))
 points(x=jitter(rep(week_in+1,ncol(sim_res_national))),y=sim_res_national[1,],col=alpha("grey",0.5),pch=20)
 points(x=jitter(rep(week_in+2,ncol(sim_res_national))),y=sim_res_national[2,],col=alpha("grey",0.5),pch=20)
 points(x=jitter(rep(week_in+3,ncol(sim_res_national))),y=sim_res_national[3,],col=alpha("grey",0.5),pch=20)
