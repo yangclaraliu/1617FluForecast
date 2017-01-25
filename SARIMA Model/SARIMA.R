@@ -5,7 +5,7 @@ setwd("C:/Users/liux3204/Google Drive/Influenza/16-17_forecast")
  baseline <- read.csv("wILI_Baseline.csv",stringsAsFactors = F)
  epidemic_week <- c(40:52,1:20)
  submission_date <- seq(as.Date("2016-11-07"),as.Date("2017-05-15"),7)
- report = 11
+ report = 12
  sapply(c("draw.onsettime.sim.R","draw.peak.sim.R","draw.peakweek.sim.R","draw.wk.sim.R"),source)
  
 nsim = 1500
