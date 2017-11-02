@@ -6,7 +6,7 @@
 
 ## How to update model in use
 4. Run **model_selected.R** one 3 is renewed. The output of this step will be a new set of model and a new set of variable lags.
-5. Run **fore_tab_v1.R** to get an updated regression table for prediction.
+5. Run **fore_tab_v1.R** to get an updated regression table for prediction. The output of this file is "fore_tab_base_all_EWa_ENb.RData" where a is the week until which public health data available and b is the week until which environmental data is updated to.
 
 ## How to get run model for results if no environmental data needs to be updated
 6. Run **fore_tab_all_v1.R**: this step creates environmental dataset. Permutation is done through bootstrapping.
